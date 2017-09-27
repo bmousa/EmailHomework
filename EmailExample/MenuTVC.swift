@@ -12,7 +12,10 @@ class MenuTVC: UITableViewController {
     
     var dataDictionary: [String:Array<Email>] = [:]
     var selectedRow = ""
-
+    var delegate : CellSelectedDelegate?
+   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,7 +58,7 @@ class MenuTVC: UITableViewController {
         //TODO: react to user selecting row
         //I want the detail view controller to update based on the row that I selected
         
-        print("In didSelectRowAt")
+        // print("In didSelectRowAt")
         //TODO: get cell information
         let keywords = Array(dataDictionary.keys)
         selectedRow = keywords[indexPath.row]
@@ -109,13 +112,21 @@ class MenuTVC: UITableViewController {
         // Pass the selected object to the new view controller.
         
         let destVC = segue.destination as! RootTVC
+        
         destVC.emails = dataDictionary[selectedRow]!
         
+        destVC.delegate = delegate
+        
+        destVC.selectedFolder = selectedRow
         //1. which button got pressed
         //2. up-to-date data
         
-        print("In prepare")
+       // print("In prepare")
     }
+    
+    
+    @IBAction func returnToMenuTVC(segue: UIStoryboardSegue) {}
+
     
 
 }

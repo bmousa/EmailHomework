@@ -15,7 +15,14 @@ protocol CellSelectedDelegate {
 class RootTVC: UITableViewController {
     
     var emails = [Email]()
+    var selectedFolder = ""
     var delegate: CellSelectedDelegate?
+    
+    
+    var index: Int = -1
+    var deletedEmail: Email?
+    
+    let spamEmail = Email(sender: "spam@asu.edu", recipient: "myemail@asu.edu", subject: "Spam", contents:"Spam")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +31,20 @@ class RootTVC: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        if selectedFolder == "Inbox" {
+            
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+        
+        if selectedFolder == "Sent" {
+            
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButton))
+        }
+    }
+    
+    func plusButton(){
+        emails.append(spamEmail)
+        performSegue(withIdentifier: "returnToMenuTVC", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,17 +93,22 @@ class RootTVC: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            
+            deletedEmail = emails.remove(at: indexPath.row)
+            index = indexPath.row
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
+            performSegue(withIdentifier: "returnToMenuTVC", sender: self)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.
@@ -100,14 +125,25 @@ class RootTVC: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        let destVC = segue.destination as! MenuTVC
+        if selectedFolder == "Inbox" {
+            if index > -1 {
+                destVC.dataDictionary["Inbox"] = emails
+                destVC.dataDictionary["Trash"]!.append(deletedEmail!)
+                
+            }
+            
+            }
+        if selectedFolder == "Sent" {
+            destVC.dataDictionary["Sent"]=emails
+        }
     }
-    */
+    
 
 }
