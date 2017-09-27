@@ -28,9 +28,9 @@ class ViewController: UIViewController, CellSelectedDelegate {
     func read(email: Email) {
         //read this email
         titleLabel.text = email.subject
-        senderLabel.text = email.sender
+        senderLabel.text = "FROM: " + email.sender
         contentsLabel.text = email.contents
-        recipientLabel.text = email.recipient
+        recipientLabel.text = "TO: " + email.recipient
     }
 }
 
