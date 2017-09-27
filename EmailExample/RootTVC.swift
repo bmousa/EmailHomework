@@ -104,6 +104,7 @@ class RootTVC: UITableViewController {
             deletedEmail = emails.remove(at: indexPath.row)
             index = indexPath.row
             
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
             performSegue(withIdentifier: "returnToMenuTVC", sender: self)
         } else if editingStyle == .insert {
